@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Школьный Помощник</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid #2575fc;
+        }
+
+        h2 {
+            color: #2575fc;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .key-system {
+            text-align: center;
+        }
+
+        .free-key {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        .key-input {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        input, textarea {
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            width: 100%;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #2575fc;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.2);
+        }
+
+        button {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .free-btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .contacts {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .contacts h3 {
+            color: #1976d2;
+            margin-bottom: 10px;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            background: #f1f3f4;
+            border-radius: 10px;
+            padding: 5px;
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .tab.active {
+            background: #2575fc;
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .equation-type {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .eq-btn {
+            padding: 12px;
+            background: #e3f2fd;
+            border: 2px solid #bbdefb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .eq-btn.active {
+            background: #2575fc;
+            color: white;
+            border-color: #2575fc;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .solution {
+            margin-top: 20px;
+            padding: 15px;
+            background: #e8f5e9;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .grade-system {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .grade-btn {
+            flex: 1;
+            padding: 10px;
+            background: #f5f5f5;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .grade-btn.active {
+            background: #2575fc;
+            color: white;
+            border-color: #2575fc;
+        }
+
+        .subject-input {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .subject-input input {
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .subject-input select {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            min-width: 100px;
+        }
+
+        .grades-list {
+            margin-top: 20px;
+        }
+
+        .grade-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .notes-list {
+            margin-top: 20px;
+        }
+
+        .note-item {
+            background: #fff3e0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border-left: 5px solid #ff9800;
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .note-btn {
+            padding: 8px 15px;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn {
+            background: #f44336;
+        }
+
+        .edit-btn {
+            background: #ff9800;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: #f1f3f4;
+            margin-top: 30px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .gdz-announcement {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .message {
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 5px solid #f44336;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #2575fc;
+        }
+
+        @media (max-width: 600px) {
+            .equation-type, .subject-input, .grade-system {
+                flex-direction: column;
+            }
+            
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .container {
+                border-radius: 15px;
+            }
+            
+            .grade-item {
+                flex-direction: column;
+                gap: 10px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎓 Школьный Помощник</h1>
+            <p class="subtitle">Ваш персональный помощник в учебе | Работает оффлайн!</p>
+        </header>
+
+        <div class="content">
+            <!-- Экран ввода ключа -->
+            <div id="keyScreen">
+                <div class="card key-system">
+                    <h2>Хотите учиться на 5?</h2>
+                    <p>Получите ключ доступа к нашему приложению!</p>
+                    <div class="free-key">✨ НОВЫМ ПОЛЬЗОВАТЕЛЯМ 1 КЛЮЧ БЕСПЛАТНЫЙ</div>
+                    
+                    <div class="key-input">
+                        <input type="text" id="keyInput" placeholder="Введите ключ доступа">
+                        <button onclick="checkKey()">Активировать</button>
+                    </div>
+                    
+                    <button class="free-btn" onclick="getFreeKey()">Получить бесплатный ключ</button>
+                    
+                    <div class="contacts">
+                        <h3>Наши контакты:</h3>
+                        <p>📱 Telegram: @west_next</p>
+                        <p>📞 WhatsApp: +7 (969) 535-69-36</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Основное приложение (скрыто до ввода ключа) -->
+            <div id="appScreen" class="hidden">
+                <div class="tab-container">
+                    <div class="tab active" onclick="switchTab('equations')">Решение уравнений</div>
+                    <div class="tab" onclick="switchTab('diary')">Электронный дневник</div>
+                    <div class="tab" onclick="switchTab('notes')">Мои памятки</div>
+                </div>
+
+                <!-- Решение уравнений -->
+                <div id="equations" class="tab-content active">
+                    <div class="card">
+                        <h2>Решение уравнений</h2>
+                        <p>Выберите тип уравнения:</p>
+                        
+                        <div class="equation-type">
+                            <div class="eq-btn active" onclick="selectEquationType('linear')">Линейные</div>
+                            <div class="eq-btn" onclick="selectEquationType('quadratic')">Квадратные</div>
+                            <div class="eq-btn" onclick="selectEquationType('system')">Системы уравнений</div>
+                            <div class="eq-btn" onclick="selectEquationType('fractions')">Дроби</div>
+                        </div>
+                        
+                        <div id="linearEq" class="equation-input">
+                            <div class="input-group">
+                                <label>Введите уравнение вида ax + b = c</label>
+                                <input type="text" id="linearInput" placeholder="Например: 2x + 5 = 13">
+                            </div>
+                            <button onclick="solveLinear()">Решить</button>
+                        </div>
+                        
+                        <div id="quadraticEq" class="equation-input hidden">
+                            <div class="input-group">
+                                <label>Введите уравнение вида ax² + bx + c = 0</label>
+                                <input type="text" id="quadraticInput" placeholder="Например: x² - 5x + 6 = 0">
+                            </div>
+                            <button onclick="solveQuadratic()">Решить</button>
+                        </div>
+                        
+                        <div id="systemEq" class="equation-input hidden">
+                            <div class="input-group">
+                                <label>Введите систему уравнений</label>
+                                <input type="text" id="systemInput1" placeholder="Первое уравнение, например: 2x + y = 7">
+                                <input type="text" id="systemInput2" placeholder="Второе уравнение, например: x - y = -1">
+                            </div>
+                            <button onclick="solveSystem()">Решить</button>
+                        </div>
+                        
+                        <div id="fractionsEq" class="equation-input hidden">
+                            <div class="input-group">
+                                <label>Введите уравнение с дробями</label>
+                                <input type="text" id="fractionsInput" placeholder="Например: (x+1)/2 = 3">
+                            </div>
+                            <button onclick="solveFractions()">Решить</button>
+                        </div>
+                        
+                        <div id="solution" class="solution hidden">
+                            <h3>Решение:</h3>
+                            <p id="solutionText"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Электронный дневник -->
+                <div id="diary" class="tab-content">
+                    <div class="card">
+                        <h2>Электронный дневник</h2>
+                        
+                        <div class="stats">
+                            <div class="stat-card">
+                                <div class="stat-value" id="totalGrades">0</div>
+                                <div>Всего оценок</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="averageGrade">0</div>
+                                <div>Средний балл</div>
+                            </div>
+                        </div>
+                        
+                        <div class="grade-system">
+                            <div class="grade-btn active" onclick="selectGradeSystem('russian')">5-балльная система</div>
+                            <div class="grade-btn" onclick="selectGradeSystem('european')">10-балльная система</div>
+                        </div>
+                        
+                        <div class="subject-input">
+                            <input type="text" id="subjectName" placeholder="Название предмета">
+                            <select id="gradeSelect"></select>
+                            <button onclick="addGrade()">Добавить оценку</button>
+                        </div>
+                        
+                        <div class="grades-list" id="gradesList"></div>
+                    </div>
+                </div>
+
+                <!-- Мои памятки -->
+                <div id="notes" class="tab-content">
+                    <div class="card">
+                        <h2>Мои памятки</h2>
+                        
+                        <div class="input-group">
+                            <label>Новая памятка</label>
+                            <input type="text" id="noteTitle" placeholder="Заголовок">
+                            <textarea id="noteText" placeholder="Текст памятки"></textarea>
+                        </div>
+                        <button onclick="addNote()">Добавить памятку</button>
+                        
+                        <div class="notes-list" id="notesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="gdz-announcement">
+                📚 СКОРО БУДЕТ ГДЗ ОФФЛАЙН!
+            </div>
+            <p>Школьный Помощник © 2023 | Все функции работают оффлайн!</p>
+            <p><small>Статус: <span id="offlineStatus">Проверка...</span></small></p>
+        </div>
+    </div>
+
+    <script>
+        // Список рабочих ключей
+        const validKeys = [
+            "SHK-A3B9-C2D8", "SHK-E5F7-G6H4", "SHK-J8K3-L9M2", "SHK-N4P6-Q7R5", 
+            "SHK-S9T2-U8V4", "SHK-W3X7-Y5Z6", "SHK-2A8B-4C9D", "SHK-6E3F-7G5H", 
+            "SHK-8J2K-9L3M", "SHK-5N7P-6Q4R", "SHK-3S8T-4U6V", "SHK-7W9X-2Y8Z", 
+            "SHK-B4C6-D8E2", "SHK-F9G3-H5J7", "SHK-K2L4-M6N8", "SHK-P7Q9-R3S5", 
+            "SHK-T8V2-W4X6", "SHK-Y7Z3-A5B9", "SHK-C8D4-E6F2", "SHK-G7H9-J3K5", 
+            "SHK-L6M8-N4P2", "SHK-Q5R7-S9T3", "SHK-V4W6-X8Y2", "SHK-Z5A7-B9C3", 
+            "SHK-D6E8-F4G2", "SHK-H7J9-K5L3", "SHK-M8N2-P6Q4", "SHK-R9S3-T5U7", 
+            "SHK-W4X6-Y8Z2", "SHK-A9B3-C5D7"
+        ];
+
+        // Проверка онлайн статуса
+        function updateOnlineStatus() {
+            const statusElement = document.getElementById('offlineStatus');
+            if (navigator.onLine) {
+                statusElement.textContent = 'Онлайн';
+                statusElement.style.color = '#4CAF50';
+            } else {
+                statusElement.textContent = 'Оффлайн';
+                statusElement.style.color = '#f44336';
+            }
+        }
+
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            updateOnlineStatus();
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            
+            if (localStorage.getItem('appActivated') === 'true') {
+                showApp();
+            }
+            
+            selectGradeSystem('russian');
+            displayGrades();
+            displayNotes();
+        });
+
+        // Проверка ключа
+        function checkKey() {
+            const keyInput = document.getElementById('keyInput');
+            const key = keyInput.value.trim().toUpperCase();
+            
+            if (validKeys.includes(key)) {
+                localStorage.setItem('appActivated', 'true');
+                localStorage.setItem('usedKey', key);
+                showMessage('✅ Ключ активирован! Спасибо за покупку!', 'success');
+                setTimeout(showApp, 1500);
+            } else {
+                showMessage('❌ Неверный ключ! Попробуйте другой или получите бесплатный ключ.', 'error');
+            }
+        }
+
+        // Получить бесплатный ключ
+        function getFreeKey() {
+            const usedKey = localStorage.getItem('usedKey');
+            let freeKey;
+            
+            if (usedKey) {
+                const usedIndex = validKeys.indexOf(usedKey);
+                freeKey = validKeys[(usedIndex + 1) % validKeys.length];
+            } else {
+                freeKey = validKeys[0];
+            }
+            
+            document.getElementById('keyInput').value = freeKey;
+            showMessage(`🎁 Ваш бесплатный ключ: ${freeKey}. Нажмите "Активировать"!`, 'success');
+        }
+
+        // Показать сообщение
+        function showMessage(text, type) {
+            const existingMessage = document.querySelector('.message');
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+            
+            const message = document.createElement('div');
+            message.className = `message ${type}`;
+            message.textContent = text;
+            
+            const keySystem = document.querySelector('.key-system');
+            keySystem.appendChild(message);
+            
+            setTimeout(() => {
+                if (message.parentNode) {
+                    message.remove();
+                }
+            }, 5000)
