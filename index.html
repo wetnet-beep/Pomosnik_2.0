@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Образовательное приложение для 5-6 классов</title>
+    <meta name="theme-color" content="#4CAF50">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Экран авторизации -->
+        <div id="auth-screen" class="screen active">
+            <div class="auth-container">
+                <h1>Образовательное приложение</h1>
+                <p class="subtitle">Для учащихся 5-6 классов</p>
+                
+                <div class="key-form">
+                    <input type="text" id="key-input" placeholder="Введите ключ доступа">
+                    <button onclick="checkKey()">Войти в приложение</button>
+                </div>
+                
+                <div class="purchase-info">
+                    <h3>КУПИТЕ КЛЮЧ ДОСТУПА</h3>
+                    <p>Для получения ключа напишите:</p>
+                    <div class="contacts">
+                        <p><strong>Telegram:</strong> @west_next</p>
+                        <p><strong>WhatsApp:</strong> +79695356936</p>
+                    </div>
+                    <p class="key-info">✅ Ключ действует 10 дней</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Главное приложение (СКРЫТО до авторизации) -->
+        <div id="app-screen" class="screen hidden">
+            <header>
+                <h1>Учебный помощник</h1>
+                <button onclick="logout()" class="logout-btn">Выйти</button>
+            </header>
+
+            <div class="tab-container">
+                <div class="tab active" onclick="switchTab('equations')">Решатель уравнений</div>
+                <div class="tab" onclick="switchTab('rules')">Правила</div>
+                <div class="tab" onclick="switchTab('diary')">Дневник</div>
+                <div class="tab" onclick="switchTab('notes')">Памятки</div>
+            </div>
+
+            <div class="tab-content">
+                <!-- Решатель уравнений -->
+                <div id="equations" class="content active">
+                    <h2>Решатель уравнений</h2>
+                    <div class="equation-input">
+                        <input type="text" id="equation" placeholder="Введите уравнение (например: 2x+5=13)">
+                        <button onclick="solveEquation()">Решить</button>
+                    </div>
+                    <div id="solution" class="solution"></div>
+                </div>
+
+                <!-- Правила -->
+                <div id="rules" class="content">
+                    <h2>Учебные правила</h2>
+                    <div class="rules-container">
+                        <div class="subject" onclick="toggleRules('math')">
+                            <h3>📐 Математика</h3>
+                            <div id="math-rules" class="rules-content">
+                                <h4>Дроби</h4>
+                                <p>Чтобы сложить дроби с разными знаменателями, нужно:</p>
+                                <ol>
+                                    <li>Найти общий знаменатель</li>
+                                    <li>Привести дроби к общему знаменателю</li>
+                                    <li>Сложить числители</li>
+                                </ol>
+                            </div>
+                        </div>
+
+                        <div class="subject" onclick="toggleRules('russian')">
+                            <h3>📖 Русский язык</h3>
+                            <div id="russian-rules" class="rules-content">
+                                <h4>Падежи</h4>
+                                <p>Именительный (кто? что?), Родительный (кого? чего?), 
+                                Дательный (кому? чему?), Винительный (кого? что?), 
+                                Творительный (кем? чем?), Предложный (о ком? о чём?)</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Дневник -->
+                <div id="diary" class="content">
+                    <h2>Электронный дневник</h2>
+                    <div class="diary-controls">
+                        <select id="subject-select">
+                            <option value="math">Математика</option>
+                            <option value="russian">Русский язык</option>
+                            <option value="history">История</option>
+                            <option value="science">Естествознание</option>
+                        </select>
+                        <input type="number" id="grade-input" min="2" max="5" placeholder="Оценка (2-5)">
+                        <button onclick="addGrade()">Добавить оценку</button>
+                    </div>
+                    <div id="grades-list"></div>
+                    <div class="average">
+                        <h3>Средний балл: <span id="average-grade">-</span></h3>
+                    </div>
+                </div>
+
+                <!-- Памятки -->
+                <div id="notes" class="content">
+                    <h2>Мои памятки</h2>
+                    <div class="notes-input">
+                        <textarea id="note-text" placeholder="Введите вашу памятку..."></textarea>
+                        <button onclick="addNote()">Сохранить памятку</button>
+                    </div>
+                    <div id="notes-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
