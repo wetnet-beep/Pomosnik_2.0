@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Школьный Помощник</title>
+    <link rel="manifest" href="manifest.json">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #06b6d4;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-warning: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Яркое цветное меню */
+        .main-menu {
+            background: var(--gradient);
+            padding: 0;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .menu-header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .app-title {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #fff, #e0e7ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .app-subtitle {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            font-weight: 300;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .menu-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            border-color: var(--primary);
+        }
+
+        .menu-card.equations { background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%); }
+        .menu-card.diary { background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%); }
+        .menu-card.notes { background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%); }
+        .menu-card.gdz { background: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%); }
+
+        .menu-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .menu-card h3 {
+            font-size: 1.5rem;
+            color: var(--dark);
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .menu-card p {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-left: 6px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: '';
+            width: 8px;
+            height: 30px;
+            background: var(--gradient);
+            border-radius: 4px;
+            display: inline-block;
+        }
+
+        .key-system {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .key-system h2 {
+            color: white;
+        }
+
+        .key-system h2::before {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .free-key {
+            background: var(--gradient-success);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .key-input {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        input, textarea, select {
+            padding: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            width: 100%;
+            background: white;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            transform: translateY(-2px);
+        }
+
+        button {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 18px 32px;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+        }
+
+        .free-btn {
+            background: var(--gradient-success);
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.4);
+        }
+
+        .free-btn:hover {
+            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.6);
+        }
+
+        .contacts {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 25px;
+            backdrop-filter: blur(10px);
+        }
+
+        .contacts h3 {
+            color: white;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .contacts p {
+            color: rgba(255, 255, 255, 0.9);
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 25px;
+            background: #f1f5f9;
+            border-radius: 15px;
+            padding: 8px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #64748b;
+        }
+
+        .tab.active {
+            background: var(--gradient);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .equation-type {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .eq-btn {
+            padding: 20px;
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .eq-btn.active {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #374151;
+            font-size: 1.1rem;
+        }
+
+        .solution {
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #d1fae5, #ecfdf5);
+            border-radius: 15px;
+            border-left: 6px solid var(--success);
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .grade-system {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .grade-btn {
+            flex: 1;
+            padding: 18px;
+            background: white;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            cursor: pointer;
+            text-align: center;
+            font-weight: 600;
+            color: #475569;
+            transition: all 0.3s;
+        }
+
+        .grade-btn.active {
+            background: var(--gradient);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .subject-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .subject-input input {
+            flex: 2;
+            min-width: 250px;
+        }
+
+        .subject-input select {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .grades-list, .notes-list {
+            margin-top: 25px;
+        }
+
+        .grade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .grade-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .note-item {
+            background: linear-gradient(135deg, #fef3c7, #fef7cd);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border-left: 6px solid var(--warning);
+            transition: all 0.3s;
+        }
+
+        .note-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.2);
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .note-btn {
+            padding: 10px 20px;
+            font-size: 0.9rem;
+        }
+
+        .delete-btn {
+            background: var(--gradient-secondary);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 30px;
+            background: #1f2937;
+            color: white;
+            margin-top: 40px;
+            border-radius: 25px 25px 0 0;
+        }
+
+        .gdz-announcement {
+            background: var(--gradient-warning);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-top: 25px;
+            box-shadow: 0 5px 15px rgba(67, 233, 123, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
+
+        .message {
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+            animation: slideIn 0.5s ease;
+        }
+
+        .success {
+            background: var(--gradient-success);
+            color: white;
+        }
+
+        .error {
+            background: var(--gradient-secondary);
+            color: white;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .online-status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 10px;
+            backdrop-filter: blur(10px);
+        }
+
+        @media (max-width: 768px) {
+            .menu-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            
+            .app-title {
+                font-size: 2.2rem;
+            }
+            
+            .subject-input {
+                flex-direction: column;
+            }
+            
+            .grade-system, .equation-type {
+                grid-template-columns: 1fr;
+            }
+            
+            .tab-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Красочное главное меню -->
+        <div class="main-menu">
+            <div class="menu-header">
+                <h1 class="app-title">🎓 Школьный Помощник</h1>
+                <p class="app-subtitle">Твой персональный гид к отличным оценкам!</p>
+            </div>
+            
+            <div class="menu-grid">
+                <div class="menu-card equations" onclick="switchTab('equations')">
+                    <span class="menu-icon">🧮</span>
+                    <h3>Решение уравнений</h3>
+                    <p>Решай любые уравнения от линейных до квадратных. Подробные объяснения и шаги решения</p>
+                </div>
+                
+                <div class="menu-card diary" onclick="switchTab('diary')">
+                    <span class="menu-icon">📊</span>
+                    <h3>Электронный дневник</h3>
+                    <p>Отслеживай свои оценки, средний балл и прогресс в учебе. 5-ти и 10-балльные системы</p>
+                </div>
+                
+                <div class="menu-card notes" onclick="switchTab('notes')">
+                    <span class="menu-icon">📝</span>
+                    <h3>Мои памятки</h3>
+                    <p>Создавай заметки, напоминания и шпаргалки. Всегда под рукой в любое время</p>
+                </div>
+                
+                <div class="menu-card gdz">
+                    <span class="menu-icon">🚀</span>
+                    <h3>ГДЗ Оффлайн</h3>
+                    <p>Скоро будет! Готовые домашние задания без интернета для всех предметов</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content">
+            <!-- Экран ввода ключа -->
+            <div id="keyScreen">
+                <div class="card key-system">
+                    <h2>🔑 Получите доступ к приложению</h2>
+                    <p style="font-size: 1.2rem; margin-bottom: 20px; opacity: 0.9;">Откройте все возможности для успешной учебы!</p>
+                    <div class="free-key">🎁 НОВЫМ ПОЛЬЗОВАТЕЛЯМ ПЕРВЫЙ КЛЮЧ БЕСПЛАТНО!</div>
+                    
+                    <div class="key-input">
+                        <input type="text" id="keyInput" placeholder="Введите ваш ключ доступа...">
+                        <button onclick="checkKey()">🚀 Активировать ключ</button>
+                    </div>
+                    
+                    <button class="free-btn" onclick="getFreeKey()">🎯 Получить бесплатный ключ</button>
+                    
+                    <div class="contacts">
+                        <h3>📞 Нужна помощь? Свяжитесь с нами:</h3>
+                        <p>💬 Telegram: @west_next</p>
+                        <p>📱 WhatsApp: +7 (969) 535-69-36</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Основное приложение -->
+            <div id="appScreen" class="hidden">
+                <div class="tab-container">
+                    <div class="tab active" onclick="switchTab('equations')">🧮 Уравнения</div>
+                    <div class="tab" onclick="switchTab('diary')">📊 Дневник</div>
+                    <div class="tab" onclick="switchTab('notes')">📝 Памятки</div>
+                </div>
+                
+                <!-- Решение уравнений -->
+                <div id="equations" class="tab-content active">
+                    <div class="card">
+                        <h2>🧮 Решение уравнений</h2>
+                        <p style="color: #666; margin-bottom: 20px;">Выберите тип уравнения и введите его для получения подробного решения</p>
+                        
+                        <div class="equation-type">
+                            <div class="eq-btn active" onclick="selectEquationType('linear')">📈 Линейные</div>
+                            <div class="eq-btn" onclick="selectEquationType('quadratic')">📊 Квадратные</div>
+                            <div class="eq-btn" onclick="selectEquationType('system')">🔄 Системы</div>
+                            <div class="eq-btn" onclick="selectEquationType('fractions')">➗ Дроби</div>
+                        </div>
+                        
+                        <div id="linearEq" class="equation-input">
+                            <div class="input-group">
+                                <label>Введите линейное уравнение вида: ax + b = c</label>
+                                <input type="text" id="linearInput" placeholder="Пример: 2x + 5 = 13 или 3(x-2) = 12">
+                            </div>
+                            <button onclick="solveLinear()">🎯 Решить уравнение</button>
+                        </div>
+                        
+                        <div id="quadraticEq" class="equation-input hidden">
+                            <div class="input-group">
+                                <label>Введите квадратное уравнение: ax² + bx + c = 0</label>
+                                <input type="text" id="quadraticInput" placeholder="
